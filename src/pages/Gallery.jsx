@@ -6,11 +6,12 @@ export default function Gallery() {
   const [gallery, setGallery] = useState([]);
   const [imageFile, setImageFile] = useState("");
 
+
   async function fetchGallery(){
     try{
       const res = await fetch("http://localhost:5000/api/gallery");
       const data = await res.json();
-      // console.log(data);
+      console.log(data);
       setGallery(data);
     }
     catch(error){
@@ -27,7 +28,6 @@ export default function Gallery() {
     imageFormData.append("picture", imageFile);
     
 
-    console.log("IMAGE FORM DATA: ", imageFormData);
     try{
       const res = await fetch("http://localhost:5000/api/gallery", {
         method: "POST",
@@ -35,7 +35,8 @@ export default function Gallery() {
       });
 
       const data = await res.json();
-      console.log("RESULT FROM POST: ", data);
+      fetchGallery();
+      alert(data.message);
     }
     catch(error){
       throw new Error(error);
@@ -43,6 +44,11 @@ export default function Gallery() {
     finally{
       setImageFile("");
     }
+  }
+
+
+  function handleDeletePicture(id){
+    setGallery((prev) => prev.filter(item => item.id !== id));
   }
 
 
@@ -54,7 +60,7 @@ export default function Gallery() {
     <>
       <div className="grid grid-cols-3 auto-rows-[250px] gap-8 p-8 w-full min-h-screen" >
       {
-        gallery.map((item) => <GalleryItem key={item.id} item={item}  />)
+        gallery.map((item) => <GalleryItem key={item.id} item={item} handleDeletePicture={handleDeletePicture}  />)
       }
       </div>
 

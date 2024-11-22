@@ -7,7 +7,7 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <main className="w-full bg-slate-50" >
+      <main className="w-full bg-gray-100" >
         <Outlet />
       </main>
     </>

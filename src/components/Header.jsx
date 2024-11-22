@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 flex justify-between items-center px-10 w-full h-[8vh] bg-slate-400" >
+    <header className="sticky top-0 flex justify-between items-center px-10 w-full h-[8vh] bg-white" >
         <h1 className="text-xl font-semibold" >
             <Link to="/" >Memories</Link>
         </h1>
