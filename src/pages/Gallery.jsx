@@ -10,7 +10,7 @@ export default function Gallery() {
     try{
       const res = await fetch("http://localhost:5000/api/gallery");
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       setGallery(data);
     }
     catch(error){
@@ -24,10 +24,10 @@ export default function Gallery() {
 
     const imageFormData = new FormData();
     imageFormData.append("user_id", 1);
-    imageFormData.append("url_path", imageFile);
+    imageFormData.append("picture", imageFile);
     
 
-    console.log(imageFile);
+    console.log("IMAGE FORM DATA: ", imageFormData);
     try{
       const res = await fetch("http://localhost:5000/api/gallery", {
         method: "POST",
@@ -35,8 +35,7 @@ export default function Gallery() {
       });
 
       const data = await res.json();
-
-      console.log(data);
+      console.log("RESULT FROM POST: ", data);
     }
     catch(error){
       throw new Error(error);
@@ -63,7 +62,7 @@ export default function Gallery() {
 
         <p>Upload new <b>Memories</b></p>
 
-        <form onSubmit={postOneImage} encType="multipart/form-data" >
+        <form onSubmit={postOneImage} >
           <input 
             type="file" 
             name="picture"
