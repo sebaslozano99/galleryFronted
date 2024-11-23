@@ -8,6 +8,7 @@ import Gallery from "./pages/Gallery";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import { Toaster } from "react-hot-toast";
+import NewMemory from "./pages/NewMemory";
 
 
 
@@ -31,6 +32,7 @@ export default function App() {
           <Route element={ <Layout /> }>
             <Route path="/" element={ <Home /> } />
             <Route path="/gallery" element={ <Gallery /> } />
+            <Route path="/gallery/new-memory" element={ <NewMemory /> } />
             <Route path="/about" element={ <About /> } />
             <Route path="*" element={ <NotFound /> } />
           </Route>

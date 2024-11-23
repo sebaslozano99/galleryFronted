@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deletePicture } from "../services/gallery";
 import PropTypes from "prop-types";
-import Spinner from "./Spinner";
 import toast from "react-hot-toast";
 
 
@@ -23,13 +22,13 @@ export default function GalleryItem({item}) {
   
 
   return (
-    <div className="p-2 bg-white border border-black/50" >
-      <div className=" w-full h-[90%] border border-black/50" >
-          <img 
-            src={`http://localhost:5000/${item.url_path}`} 
-            alt={item.name}
-            className="w-full h-full object-cover" 
-          />
+    <article className="p-3 bg-white border border-black/50 rounded-xl" >
+      <div className=" w-full h-[90%] border border-black/50 rounded-md" >
+        <img 
+          src={`http://localhost:5000/${item.url_path}`} 
+          alt={item.name}
+          className="w-full h-full rounded-md object-cover" 
+        />
       </div>
 
       <button 
@@ -37,9 +36,9 @@ export default function GalleryItem({item}) {
         disabled={isPending}
         className="px-8 py-1 bg-red-500 text-white rounded" 
       >
-        {isPending ? <Spinner size={1.2}  /> : "Delete"}
+        {isPending ? "Deleting..." : "Delete"}
       </button>
-    </div>
+    </article>
 
   )
 }
