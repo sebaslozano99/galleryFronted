@@ -6,7 +6,7 @@ import { fetchGallery } from "../../services/gallery";
 
 function useGetGallery(){
   const { data: gallery, isPending, isError, error } = useQuery({
-    queryKey: ["getGallery"],
+    queryKey: ["gallery"],
     queryFn: fetchGallery,
     retry: 1,
     refetchOnWindowFocus: false,

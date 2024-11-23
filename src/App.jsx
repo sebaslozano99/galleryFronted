@@ -36,7 +36,7 @@ export default function App() {
             <Route path="/gallery" element={ <Gallery /> } >
               <Route index element={<GalleryContainer />} />
               <Route path="new-memory" element={ <NewMemory /> } />
-              <Route path="/gallery/edit-memory" element={ <GalleryEditMemory /> } />
+              <Route path="/gallery/edit-memory/:pictureID" element={ <GalleryEditMemory /> } />
             </Route>
             <Route path="/about" element={ <About /> } />
             <Route path="*" element={ <NotFound /> } />

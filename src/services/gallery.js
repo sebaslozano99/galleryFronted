@@ -17,6 +17,22 @@ async function fetchGallery(){
 
 
 
+async function fetchSingleImage(pictureID){
+  try{
+    const res = await fetch(`${API_URL}/gallery/${pictureID}`);
+    if(!res.ok) throw new Error("Failed to fetch!");
+    const data = await res.json();
+    // console.log("data: ", data);
+    return data;
+  }
+  catch(error){
+    console.error(error);
+    throw new Error(error);
+  }
+}
+
+
+
 async function postOneImage(e, user_id, imageFile, title, description){
     e.preventDefault();
 
@@ -31,6 +47,8 @@ async function postOneImage(e, user_id, imageFile, title, description){
         method: "POST",
         body: imageFormData
       });
+
+      if(!res.ok) throw new Error("Failed to Post new memory!");
 
       const data = await res.json();
       // console.log(data);
@@ -48,6 +66,9 @@ async function postOneImage(e, user_id, imageFile, title, description){
       const res = await fetch(`${API_URL}/gallery/${id}`, {
         method: "DELETE",
       });
+
+      if(!res.ok) throw new Error("Failed to delete memory!");
+      
       const result = await res.json();
       // console.log(result);
       return result;
@@ -59,4 +80,4 @@ async function postOneImage(e, user_id, imageFile, title, description){
 
 
 
-export { fetchGallery, postOneImage, deletePicture }
+export { fetchGallery, fetchSingleImage, postOneImage, deletePicture }

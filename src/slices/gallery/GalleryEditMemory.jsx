@@ -1,5 +1,6 @@
-import { useReducer } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useReducer } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import useGetSingleImage from "./useGetSingleImage";
 
 
 
@@ -35,16 +36,23 @@ function reducer(state, action){
 
 export default function GalleryEditMemory() {
 
+  const { pictureID } = useParams();
   const [{title, description, file}, dispatch] = useReducer(reducer, initialState);
+  const { singleImage, isPending, isSuccess } = useGetSingleImage(pictureID);
   const navigate = useNavigate();
 
 
-  // const {  }
+  useEffect(() => {
+    if(isSuccess){
+      dispatch({type: "title/setTitle", payload: singleImage[0]?.title});
+      dispatch({type: "description/setDescription", payload: singleImage[0]?.description});
+    }
+  }, [isSuccess, singleImage])
 
 
   return (
     <div className="flex flex-col justify-center items-center w-full h-[92vh]" > 
-      <h2>NEW MEMORY</h2>
+      <h2>EDIT MEMORY</h2>
 
       <form
         // onSubmit={(e) => postImage(e, 1, file, title, description)}
@@ -85,7 +93,7 @@ export default function GalleryEditMemory() {
             type="file" 
             name="picture"
             onChange={(e) => dispatch({type: "file/seteFile", payload: e.target.files[0]})}
-            required
+            // required
           />
         </div>
 
@@ -93,10 +101,12 @@ export default function GalleryEditMemory() {
           <button
             className="px-4 py-2 w-full bg-slate-400 hover:bg-slate-500 hover:text-white transition-all ease-out duration-300"
           >
-            { isPending ? "Posting..." : "Save" }
+            { isPending ? "Posting..." : "Edit" }
           </button>
         </div>
+
       </form>
+
     </div>
   )
 }

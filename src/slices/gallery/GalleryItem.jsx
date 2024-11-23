@@ -62,7 +62,7 @@ export default function GalleryItem({item}) {
             variant="rounded"
             bgColor="bg-red-600" 
           >
-            <Link to="/gallery/edit-memory" className="flex justify-center items-center h-6 w-6 rounded-full px-1 py-1" >
+            <Link to={`/gallery/edit-memory/${item.id}`} className="flex justify-center items-center h-6 w-6 rounded-full px-1 py-1" >
               <MdModeEdit size={25} color="white" />
             </Link>
           </Button>
