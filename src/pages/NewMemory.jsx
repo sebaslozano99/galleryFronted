@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useReducer } from "react";
 import { postOneImage } from "../services/gallery";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 const initialState = {
@@ -36,12 +37,13 @@ function reducer(state, action){
 export default function NewMemory() {
 
   const [{title, description, file}, dispatch] = useReducer(reducer, initialState);
+  const navigate = useNavigate();
 
-  const { mutate: postImage } = useMutation({
-    mutationFn: (e) => postOneImage(e, 1, file),
+  const { mutate: postImage, isPending } = useMutation({
+    mutationFn: (e) => postOneImage(e, 1, file, title, description),
     onSuccess: () => {
-    //   queryClient.invalidateQueries(["getGallery"]);
       toast.success("Memory added!", {duration: 1500, position: "top-right", icon: "❤️"});
+      navigate("/gallery");
     },
     onError: () => toast.error("Something went wrong!")
   });
@@ -52,8 +54,8 @@ export default function NewMemory() {
         <h2>NEW MEMORY</h2>
 
         <form
-            onSubmit={(e) => postImage(e, 1, file)}
-            className="flex flex-col gap-6 py-8 px-4 h-auto border-[1px] border-black/50 p-4 rounded-xl shadow-md"
+            onSubmit={(e) => postImage(e, 1, file, title, description)}
+            className="flex flex-col gap-6 py-8 px-4 h-auto bg-white border-[1px] border-black/50 p-4 rounded-xl shadow-md"
         >
             <legend className="font-semibold text-center text-xl" >Fill up all the fields</legend>
 
@@ -66,7 +68,7 @@ export default function NewMemory() {
                     value={title}
                     onChange={(e) => dispatch({type: "title/setTitle", payload: e.target.value})}
                     required
-                    className="py-1.5 px-2 w-80"
+                    className="py-1.5 px-2 w-80 border-[1px] border-black/30"
                 />
             </div>
 
@@ -79,7 +81,7 @@ export default function NewMemory() {
                     value={description}
                     onChange={(e) => dispatch({type: "description/setDescription", payload: e.target.value})}
                     required
-                    className="py-1.5 px-2 w-80"
+                    className="py-1.5 px-2 w-80 border-[1px] border-black/30"
                 />
             </div>
 
@@ -96,9 +98,9 @@ export default function NewMemory() {
 
             <div>
                 <button
-                    className="bg-slate-400 px-4 py-2 w-full"
+                    className="px-4 py-2 w-full bg-slate-400 hover:bg-slate-500 hover:text-white transition-all ease-out duration-300"
                 >
-                    Upload
+                    { isPending ? "Posting..." : "Save" }
                 </button>
             </div>
         </form>
