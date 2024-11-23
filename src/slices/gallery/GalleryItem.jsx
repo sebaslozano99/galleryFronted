@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deletePicture } from "../services/gallery";
+import { deletePicture } from "../../services/gallery";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
-
-
-
+import { Link } from "react-router-dom"
+import CircleSpinner from "../../components/CircleSpinner";
+import Button from "../../components/Button";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 
@@ -15,7 +15,7 @@ export default function GalleryItem({item}) {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending: isDeleting } = useMutation({
     mutationFn: () => deletePicture(item.id),
     onSuccess: () => {
       queryClient.invalidateQueries(["getGallery"]);
@@ -45,21 +45,28 @@ export default function GalleryItem({item}) {
         </div>
 
         <div className="flex justify-center items-center gap-2 w-[20%] h-full" >
-          <button 
-            onClick={mutate}
-            disabled={isPending}
-            className="flex justify-center items-center px-1 py-1 w-6 h-6 bg-[#252525] rounded-full" 
-          >
-            {isPending ? "Deleting..." : <MdDeleteOutline size={25} color="white" />}
-          </button>
 
-          <button 
+          <Button 
+            variant="rounded" 
+            bgColor="bg-[#252525]" 
+            paddingX="px-1" 
+            paddingY="py-1" 
+            className="flex justify-center items-center h-6 w-6" 
+            isLoading={isDeleting}
             onClick={mutate}
-            disabled={isPending}
-            className="flex justify-center items-center px-1 py-1 w-6 h-6 bg-red-600 rounded-full" 
           >
-            {isPending ? "Deleting..." : <MdModeEdit size={25} color="white" />}
-          </button>
+            {isDeleting ? <CircleSpinner /> : <MdDeleteOutline size={25} color="white"  />}
+          </Button>
+
+          <Button
+            variant="rounded"
+            bgColor="bg-red-600" 
+          >
+            <Link to="/gallery/edit-memory" className="flex justify-center items-center h-6 w-6 rounded-full px-1 py-1" >
+              <MdModeEdit size={25} color="white" />
+            </Link>
+          </Button>
+
         </div>
 
       </div>

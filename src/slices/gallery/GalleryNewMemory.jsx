@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useReducer } from "react";
-import { postOneImage } from "../services/gallery";
-import toast from "react-hot-toast";
+import { postOneImage } from "../../services/gallery";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 const initialState = {
@@ -34,7 +34,7 @@ function reducer(state, action){
 }
 
 
-export default function NewMemory() {
+export default function GalleryNewMemory() {
 
   const [{title, description, file}, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
