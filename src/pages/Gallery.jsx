@@ -1,74 +1,57 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchGallery, postOneImage } from "../services/gallery";
 import GalleryItem from "../components/GalleryItem";
+import Spinner from "../components/Spinner";
+import toast from "react-hot-toast";
+
+
 
 export default function Gallery() {
 
-  const [gallery, setGallery] = useState([]);
   const [imageFile, setImageFile] = useState("");
+  const queryClient = useQueryClient();
+
+  const { data: gallery, isPending, isError, error } = useQuery({
+    queryKey: ["getGallery"],
+    queryFn: fetchGallery,
+    retry: 1
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: (e) => postOneImage(e, 1, imageFile),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getGallery"]);
+      toast.success("Memory added!", {duration: 1500, position: "top-right", icon: "❤️"});
+    },
+    onError: () => toast.error("Something went wrong!")
+  });
 
 
-  async function fetchGallery(){
-    try{
-      const res = await fetch("http://localhost:5000/api/gallery");
-      const data = await res.json();
-      console.log(data);
-      setGallery(data);
-    }
-    catch(error){
-      throw new Error(error);
-    }
-  }
 
 
-  async function postOneImage(e){
-    e.preventDefault();
-
-    const imageFormData = new FormData();
-    imageFormData.append("user_id", 1);
-    imageFormData.append("picture", imageFile);
-    
-
-    try{
-      const res = await fetch("http://localhost:5000/api/gallery", {
-        method: "POST",
-        body: imageFormData
-      });
-
-      const data = await res.json();
-      fetchGallery();
-      alert(data.message);
-    }
-    catch(error){
-      throw new Error(error);
-    }
-    finally{
-      setImageFile("");
-    }
-  }
+  if(isError) return <div className="flex justify-center items-center w-full min-h-[90vh]" >
+    <p>{error.message}</p>
+  </div>
 
 
-  function handleDeletePicture(id){
-    setGallery((prev) => prev.filter(item => item.id !== id));
-  }
-
-
-  useEffect(() => {
-    fetchGallery();
-  }, [])
+  if(isPending) return <div className="flex justify-center items-center w-full min-h-[90vh]" >
+    <Spinner />
+  </div>
 
   return (
     <>
-      <div className="grid grid-cols-3 auto-rows-[250px] gap-8 p-8 w-full min-h-screen" >
-      {
-        gallery.map((item) => <GalleryItem key={item.id} item={item} handleDeletePicture={handleDeletePicture}  />)
-      }
+      <div className="grid grid-cols-3 auto-rows-[400px] gap-8 p-4 w-full min-h-screen" >
+        {
+          gallery.map((item) => <GalleryItem key={item.id} item={item}   />)
+        }
       </div>
 
-      <div className="w-full p-8" >
+      <div className="w-full p-4" >
 
         <p>Upload new <b>Memories</b></p>
 
-        <form onSubmit={postOneImage} >
+        <form onSubmit={(e) => mutate(e, 1, imageFile)} >
           <input 
             type="file" 
             name="picture"

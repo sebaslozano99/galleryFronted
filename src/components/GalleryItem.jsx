@@ -1,32 +1,26 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deletePicture } from "../services/gallery";
 import PropTypes from "prop-types";
 import Spinner from "./Spinner";
-import { useState } from "react";
+import toast from "react-hot-toast";
 
 
 
-export default function GalleryItem({item, handleDeletePicture}) {
 
-  const [isDeleting, setIsDeleting] = useState(false);
+export default function GalleryItem({item}) {
 
+  const queryClient = useQueryClient();
 
-  async function deletePicture(){
-    setIsDeleting(true);
-    try{
-      const res = await fetch(`http://localhost:5000/api/gallery/${item.id}`, {
-        method: "DELETE",
-      });
-      const result = await res.json();
-      handleDeletePicture(item.id);
-      console.log(result);
-    }
-    catch(error){
-      throw new Error(error);
-    }
-    finally{
-      setIsDeleting(false);
-    }
-  }
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => deletePicture(item.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getGallery"]);
+      toast.success("Memory deleted!", {duration: 1500, position: "top-right", icon: "❌"});
+    },
+    onError: () => toast.error("Couldn't delete memory! Try again!")
+  });
 
+  
 
   return (
     <div className="p-2 bg-white border border-black/50" >
@@ -34,16 +28,16 @@ export default function GalleryItem({item, handleDeletePicture}) {
           <img 
             src={`http://localhost:5000/${item.url_path}`} 
             alt={item.name}
-            className="w-full h-full object-contain" 
+            className="w-full h-full object-cover" 
           />
       </div>
 
       <button 
-        onClick={deletePicture}
-        disabled={isDeleting}
+        onClick={mutate}
+        disabled={isPending}
         className="px-8 py-1 bg-red-500 text-white rounded" 
       >
-        {isDeleting ? <Spinner size={1.2}  /> : "Delete"}
+        {isPending ? <Spinner size={1.2}  /> : "Delete"}
       </button>
     </div>
 
@@ -53,5 +47,4 @@ export default function GalleryItem({item, handleDeletePicture}) {
 
 GalleryItem.propTypes = {
     item: PropTypes.object,
-    handleDeletePicture: PropTypes.func
 }

@@ -7,7 +7,7 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <main className="w-full bg-gray-100" >
+      <main className="w-full min-h-[90vh] bg-gray-100" >
         <Outlet />
       </main>
     </>
