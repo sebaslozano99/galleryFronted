@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deletePicture } from "../../services/gallery";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import CircleSpinner from "../../components/CircleSpinner";
 import Button from "../../components/Button";
 import PropTypes from "prop-types";

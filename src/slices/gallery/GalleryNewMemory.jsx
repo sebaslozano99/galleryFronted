@@ -1,8 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
 import { useReducer } from "react";
 import { postOneImage } from "../../services/gallery";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import useMutate from "./useMutate";
 
 
 const initialState = {
@@ -38,15 +37,11 @@ export default function GalleryNewMemory() {
 
   const [{title, description, file}, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
+  function navigateGallery(){
+    navigate("/gallery");
+  }
 
-  const { mutate: postImage, isPending } = useMutation({
-    mutationFn: (e) => postOneImage(e, 1, file, title, description),
-    onSuccess: () => {
-      toast.success("Memory added!", {duration: 1500, position: "top-right", icon: "❤️"});
-      navigate("/gallery");
-    },
-    onError: () => toast.error("Something went wrong!")
-  });
+  const { mutate: postImage, isPending: isPosting } = useMutate(1, file, title, description, postOneImage, navigateGallery, "Memory added!");
 
 
   return (
@@ -100,7 +95,7 @@ export default function GalleryNewMemory() {
                 <button
                     className="px-4 py-2 w-full bg-slate-400 hover:bg-slate-500 hover:text-white transition-all ease-out duration-300"
                 >
-                    { isPending ? "Posting..." : "Save" }
+                    { isPosting ? "Posting..." : "Save" }
                 </button>
             </div>
         </form>

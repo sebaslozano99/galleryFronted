@@ -1,11 +1,10 @@
 import { useEffect, useReducer } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 import { updateOneImage } from "../../services/gallery";
 import useGetSingleImage from "./useGetSingleImage";
+import LoadingPage from "../../components/LoadingPage";
 import SquareLoader from "../../components/SquareLoader";
-import toast from "react-hot-toast";
-
+import useMutate from "./useMutate";
 
 
 const initialState = {
@@ -42,19 +41,13 @@ export default function GalleryEditMemory() {
 
   const { pictureID } = useParams();
   const [{title, description, file}, dispatch] = useReducer(reducer, initialState);
-  const { singleImage, isPending, isSuccess } = useGetSingleImage(pictureID);
   const navigate = useNavigate();
-
-
-  const { mutate: handleUpdate, isPending: isUpdating } = useMutation({
-    mutationFn: (e) => updateOneImage(e, pictureID, file, title, description),
-    onSuccess: () => {
-      toast.success("Memory Updated!", {duration: 1500, position: "top-right", icon: "❤️"});
-      navigate("/gallery");
-    },
-    onError: () => toast.error("Something went wrong!")
-  });
-
+  function navigateGallery(){
+    navigate("/gallery");
+  }
+  
+  const { singleImage, isPending, isSuccess } = useGetSingleImage(pictureID);
+  const { mutate: handleUpdate, isPending: isUpdating } = useMutate(pictureID, file, title, description, updateOneImage, navigateGallery, "updated successfully!");
 
 
 
@@ -68,9 +61,9 @@ export default function GalleryEditMemory() {
   }, [isSuccess, singleImage]);
 
 
-  if(isPending) return <div className="flex justify-center items-center w-full min-h-[92vh]" >
+  if(isPending) return <LoadingPage>
     <SquareLoader />
-  </div>
+  </LoadingPage>
 
 
   return (
@@ -116,7 +109,6 @@ export default function GalleryEditMemory() {
             type="file" 
             name="picture"
             onChange={(e) => dispatch({type: "file/seteFile", payload: e.target.files[0]})}
-            // required
           />
         </div>
 

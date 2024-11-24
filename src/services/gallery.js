@@ -4,14 +4,19 @@ const API_URL = "http://localhost:5000/api";
 async function fetchGallery(){
     try{
       const res = await fetch(`${API_URL}/gallery`);
-      if(!res.ok) throw new Error("Failed to fetch!");
+      
+      if(!res.ok) {
+        const errorData = res.json();
+        throw new Error(errorData?.message || "Failed to fetch gallery!");
+      } 
+
       const data = await res.json();
       // console.log("data: ", data);
       return data;
     }
     catch(error){
       console.error(error);
-      throw new Error(error);
+      throw new Error(error.message || "Something went worng fetching gallery!");
     }
 }
 
@@ -20,14 +25,19 @@ async function fetchGallery(){
 async function fetchSingleImage(pictureID){
   try{
     const res = await fetch(`${API_URL}/gallery/${pictureID}`);
-    if(!res.ok) throw new Error("Failed to fetch!");
+    
+    if(!res.ok) {
+      const errorData = res.json();
+      throw new Error(errorData?.message || "Failed to fetch memory!");
+    } 
+
     const data = await res.json();
     // console.log("data: ", data);
     return data;
   }
   catch(error){
     console.error(error);
-    throw new Error(error);
+    throw new Error(error.message || "Couldn't fetch memory! Try again!");
   }
 }
 
@@ -48,14 +58,17 @@ async function postOneImage(e, user_id, imageFile, title, description){
         body: imageFormData
       });
 
-      if(!res.ok) throw new Error("Failed to Post new memory!");
+      if(!res.ok) {
+        const errorData = res.json();
+        throw new Error(errorData?.message || "Failed to add memory!");
+      } 
 
       const data = await res.json();
       // console.log(data);
       return data;
     }
     catch(error){
-      throw new Error(error);
+      throw new Error(error.message || "Couldn't add memory! Try again!");
     }
   }
 
@@ -76,14 +89,18 @@ async function postOneImage(e, user_id, imageFile, title, description){
         body: imageFormData
       });
 
-      if(!res.ok) throw new Error("Failed to Post new memory!");
+      if(!res.ok) {
+        const errorData = res.json();
+        throw new Error(errorData?.message || "Failed to Update memory!");
+      } 
+        
 
       const data = await res.json();
-      console.log(data);
+      // console.log(data
       return data;
     }
     catch(error){
-      throw new Error(error);
+      throw new Error(error.message || "Something went wrong during memory update!");
     }
   }
 
@@ -95,14 +112,17 @@ async function postOneImage(e, user_id, imageFile, title, description){
         method: "DELETE",
       });
 
-      if(!res.ok) throw new Error("Failed to delete memory!");
+      if(!res.ok) {
+        const errorData = res.json();
+        throw new Error(errorData?.message || "Failed to Delete memory!");
+      } 
       
       const result = await res.json();
       // console.log(result);
       return result;
     }
     catch(error){
-      throw new Error(error);
+      throw new Error(error.message || "Couldn't delete memory! Try again!");
     }
   }
 
