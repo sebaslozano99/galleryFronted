@@ -60,6 +60,34 @@ async function postOneImage(e, user_id, imageFile, title, description){
   }
 
 
+  
+  async function updateOneImage(e, picture_id, imageFile, title, description){
+
+    e.preventDefault();
+
+    const imageFormData = new FormData();
+    imageFormData.append("picture", imageFile);
+    imageFormData.append("title", title);
+    imageFormData.append("description", description);
+
+    try{
+      const res = await fetch(`${API_URL}/gallery/${picture_id}`, {
+        method: "PUT",
+        body: imageFormData
+      });
+
+      if(!res.ok) throw new Error("Failed to Post new memory!");
+
+      const data = await res.json();
+      console.log(data);
+      return data;
+    }
+    catch(error){
+      throw new Error(error);
+    }
+  }
+
+
 
   async function deletePicture(id){
     try{
@@ -80,4 +108,4 @@ async function postOneImage(e, user_id, imageFile, title, description){
 
 
 
-export { fetchGallery, fetchSingleImage, postOneImage, deletePicture }
+export { fetchGallery, fetchSingleImage, postOneImage, updateOneImage, deletePicture }

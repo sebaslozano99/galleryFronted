@@ -54,7 +54,7 @@ export default function GalleryNewMemory() {
         <h2>NEW MEMORY</h2>
 
         <form
-            onSubmit={(e) => postImage(e, 1, file, title, description)}
+            onSubmit={postImage}
             className="flex flex-col gap-6 py-8 px-4 h-auto bg-white border-[1px] border-black/50 p-4 rounded-xl shadow-md"
         >
             <legend className="font-semibold text-center text-xl" >Fill up all the fields</legend>

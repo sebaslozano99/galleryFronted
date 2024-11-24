@@ -1,6 +1,10 @@
 import { useEffect, useReducer } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { updateOneImage } from "../../services/gallery";
 import useGetSingleImage from "./useGetSingleImage";
+import SquareLoader from "../../components/SquareLoader";
+import toast from "react-hot-toast";
 
 
 
@@ -42,12 +46,31 @@ export default function GalleryEditMemory() {
   const navigate = useNavigate();
 
 
+  const { mutate: handleUpdate, isPending: isUpdating } = useMutation({
+    mutationFn: (e) => updateOneImage(e, pictureID, file, title, description),
+    onSuccess: () => {
+      toast.success("Memory Updated!", {duration: 1500, position: "top-right", icon: "❤️"});
+      navigate("/gallery");
+    },
+    onError: () => toast.error("Something went wrong!")
+  });
+
+
+
+
+
+
   useEffect(() => {
     if(isSuccess){
       dispatch({type: "title/setTitle", payload: singleImage[0]?.title});
       dispatch({type: "description/setDescription", payload: singleImage[0]?.description});
     }
-  }, [isSuccess, singleImage])
+  }, [isSuccess, singleImage]);
+
+
+  if(isPending) return <div className="flex justify-center items-center w-full min-h-[92vh]" >
+    <SquareLoader />
+  </div>
 
 
   return (
@@ -55,7 +78,7 @@ export default function GalleryEditMemory() {
       <h2>EDIT MEMORY</h2>
 
       <form
-        // onSubmit={(e) => postImage(e, 1, file, title, description)}
+        onSubmit={handleUpdate}
         className="flex flex-col gap-6 py-8 px-4 h-auto bg-white border-[1px] border-black/50 p-4 rounded-xl shadow-md"
       >
         <legend className="font-semibold text-center text-xl" >Fill up all the fields</legend>
@@ -101,7 +124,7 @@ export default function GalleryEditMemory() {
           <button
             className="px-4 py-2 w-full bg-slate-400 hover:bg-slate-500 hover:text-white transition-all ease-out duration-300"
           >
-            { isPending ? "Posting..." : "Edit" }
+            { isUpdating ? "Posting..." : "Edit" }
           </button>
         </div>
 
