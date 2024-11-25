@@ -34,6 +34,7 @@ export default function GalleryItem({item}) {
           src={`http://localhost:5000/${item.url_path}`} 
           alt={item.name}
           className="w-full h-full object-cover" 
+          loading="lazy"
         />
       </div>
 

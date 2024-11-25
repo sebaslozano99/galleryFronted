@@ -18,7 +18,7 @@ export default function Button({
 
   if(variant !== "regular") return (
     <button
-        className={`${paddingY} ${paddingX} ${bgColor} rounded-full ${className}`}
+        className={`${paddingY} ${paddingX} ${bgColor} rounded-full transition-all ease-in-out duration-300 ${className}`}
         onClick={onClick}
         disabled={isLoading}
     >
@@ -29,7 +29,7 @@ export default function Button({
 
   return (
     <button
-        className={`${paddingY} ${paddingX} ${bgColor} ${className}`}
+        className={`${paddingY} ${paddingX} ${bgColor} transition-all ease-in-out duration-300 ${className}`}
         onClick={onClick}
     >
         {children}
