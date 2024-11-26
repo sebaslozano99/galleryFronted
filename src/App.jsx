@@ -16,6 +16,7 @@ import LoginForm from "./slices/user/LoginForm";
 import NewMemory from "./slices/gallery/GalleryNewMemory";
 import GalleryContainer from "./slices/gallery/GalleryContainer";
 import GalleryEditMemory from "./slices/gallery/GalleryEditMemory";
+import Signup from "./slices/user/Signup";
 
 
 
@@ -36,21 +37,26 @@ export default function App() {
     <QueryClientProvider client={queryClient} >
       <BrowserRouter>
         <Routes>
+
           <Route element={ <Layout /> }>
             <Route path="/" element={ <Home /> } />
+
             <Route path="/gallery" element={ <Gallery /> } >
               <Route index element={<GalleryContainer />} />
               <Route path="new-memory" element={ <NewMemory /> } />
               <Route path="/gallery/edit-memory/:pictureID" element={ <GalleryEditMemory /> } />
             </Route>
+
             <Route path="/auth" element={ <Auth /> } >
               <Route index element={ <Navigate replace to="login" /> } />
               <Route path="login" element={ <LoginForm /> } />
-              <Route path="signup" element={ <h1>Signup</h1> } />
+              <Route path="signup" element={ <Signup /> } />
             </Route>
+
             <Route path="/about" element={ <About /> } />
             <Route path="*" element={ <NotFound /> } />
           </Route>
+
         </Routes>
       </BrowserRouter>
       <Toaster />

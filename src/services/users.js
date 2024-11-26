@@ -1,8 +1,17 @@
 const API_URL = "http://localhost:5000/api/auth";
 
 
-async function login(e, email, password){
+async function signup(e, name, email, password, confirm){
     e.preventDefault();
+
+    if(!name || !email || !password || !confirm) {
+        return console.log("Fill all fields")
+    };
+
+    //Validations
+    if(password !== confirm) throw new Error("Confirm your password correctly!");
+    if(confirm.length <= 6) throw new Error("Password must be at least 7 characters long!");
+
 
     try{
         const res = await fetch(`${API_URL}/login`, {
@@ -26,4 +35,4 @@ async function login(e, email, password){
 
 
 
-export { login }
+export { signup }

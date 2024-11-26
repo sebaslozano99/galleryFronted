@@ -10,14 +10,11 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
 
 
-  
-
-
   return (
     <form 
-      className="flex flex-col justify-around items-center gap-2 p-6 w-[28em] h-[20em] bg-white border-[1px] border-slate-500/40 shadow-xl"
+      className="flex flex-col justify-around items-center gap-2 p-6 w-[28em] h-[22em] bg-white border-[1px] border-slate-500/40 shadow-xl rounded-xl"
     >
-      <h2 className="font-semibold text-2xl" >Log in to your account</h2>
+      <h2 className="font-semibold text-2xl mb-4" >Log in to your account</h2>
 
       <div className="flex items-center justify-between w-full" >
         <label htmlFor="email" className="font-semibold" >Email:</label>
@@ -38,7 +35,7 @@ export default function LoginForm() {
           id="password"
           type="password" 
           value={password}
-          onChange={(e) => setPassword(e.target.password)}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="************"
           className="px-2 py-1.5 w-3/4 border-[.5px] border-slate-500/40"
           required 
