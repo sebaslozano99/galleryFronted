@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { signup } from "../../services/users";
 import Button from "../../components/Button";
+import toast from "react-hot-toast";
 
 
 const initialState = {
   name: "",
+  lastName: "",
   email: "",
   password: "",
   confirm: ""
@@ -19,6 +21,12 @@ function reducer(state, action){
       return {
         ...state,
         name: action.payload
+      };
+
+    case "lastName/setLastName":
+      return {
+        ...state,
+        lastName: action.payload
       };
     
     case "email/setEmail":
@@ -47,18 +55,22 @@ function reducer(state, action){
 
 export default function Signup() {
   
-  const [{email, name, password, confirm}, dispatch] = useReducer(reducer, initialState);
+  const [{email, lastName, name, password, confirm}, dispatch] = useReducer(reducer, initialState);
 
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (e) =>  signup(e, name, email, password, confirm),
+    mutationFn: (e) =>  signup(e, name, lastName, email, password, confirm),
+    onSuccess: (data) => console.log("data:", data),
+    onError: (error) => {
+      toast.error(error.message);
+    }
   });
 
 
   return (
     <form 
       onSubmit={mutate}
-      className="flex flex-col justify-around items-center gap-6 p-6 w-[28em] h-[29em] bg-white border-[1px] border-slate-500/40 shadow-xl rounded-xl"
+      className="flex flex-col justify-around items-center gap-6 p-6 w-[30em] h-[32em] bg-white border-[1px] border-slate-500/40 shadow-xl rounded-xl"
     >
       <h2 className="font-semibold text-2xl mb-4" >Create Account</h2>
 
@@ -69,7 +81,20 @@ export default function Signup() {
           type="text" 
           value={name}
           onChange={(e) => dispatch({type: "name/setName", payload: e.target.value})}
-          placeholder="Carol Scissor"
+          placeholder="Carol"
+          className="px-2 py-1.5 w-3/4 border-[.5px] border-slate-500/40"
+          required 
+        />
+      </div>
+
+      <div className="flex items-center justify-between w-full" >
+        <label htmlFor="last_name" className="font-semibold" >Last Name:</label>
+        <input 
+          id="last_name"
+          type="text" 
+          value={lastName}
+          onChange={(e) => dispatch({type: "lastName/setLastName", payload: e.target.value})}
+          placeholder="Scissors"
           className="px-2 py-1.5 w-3/4 border-[.5px] border-slate-500/40"
           required 
         />

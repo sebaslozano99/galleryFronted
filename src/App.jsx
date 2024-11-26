@@ -59,7 +59,7 @@ export default function App() {
 
         </Routes>
       </BrowserRouter>
-      <Toaster />
+      <Toaster position="top-right" toastOptions={{duration: 2000, className: "mt-10"}} />
     </QueryClientProvider>
   )
 }

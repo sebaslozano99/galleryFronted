@@ -8,7 +8,7 @@ function useMutate(id, file, title, description, func, navigateFn, successMsg = 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (e) => func(e, id, file, title, description),
     onSuccess: () => {
-      toast.success(successMsg, {duration: 1500, position: "top-right", icon: "❤️"});
+      toast.success(successMsg, {icon: "❤️"});
       navigateFn();
     },
     onError: () => toast.error(errorMsg)
