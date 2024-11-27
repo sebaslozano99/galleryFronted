@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../services/users";
+import toast from "react-hot-toast";
 
 
 
@@ -8,10 +11,18 @@ export default function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (e) => login(e, email, password),
+    onSuccess: () => navigate("/gallery"),
+    onError: (error) => toast.error(error.error || error.message),
+  });
 
 
   return (
     <form 
+      onSubmit={mutate}
       className="flex flex-col justify-around items-center gap-2 p-6 w-[28em] h-[22em] bg-white border-[1px] border-slate-500/40 shadow-xl rounded-xl"
     >
       <h2 className="font-semibold text-2xl mb-4" >Log in to your account</h2>
@@ -47,7 +58,7 @@ export default function LoginForm() {
       </div>
 
       <Button bgColor="bg-[#252525]" paddingX="px-2" paddingY="py-2" className=" text-white w-full hover:bg-[#343434]" >
-        Log in
+        { isPending ? "Loading..." : "Log in" }
       </Button>
     </form>
   )

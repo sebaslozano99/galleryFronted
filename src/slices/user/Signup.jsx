@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { signup } from "../../services/users";
 import Button from "../../components/Button";
@@ -56,11 +56,11 @@ function reducer(state, action){
 export default function Signup() {
   
   const [{email, lastName, name, password, confirm}, dispatch] = useReducer(reducer, initialState);
-
+  const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationFn: (e) =>  signup(e, name, lastName, email, password, confirm),
-    onSuccess: (data) => console.log("data:", data),
+    onSuccess: () => navigate("/gallery"),
     onError: (error) => {
       toast.error(error.message);
     }
@@ -134,7 +134,9 @@ export default function Signup() {
           value={confirm}
           onChange={(e) => dispatch({type: "confirm/setConfirm", payload: e.target.value})}
           placeholder="************"
-          className={`px-2 py-1.5 w-3/4 border-[.5px] border-slate-500/40 outline-none ${password?.length > 0 && confirm === password ? "border-green-500" : "border-red-500"}`}
+          className={`px-2 py-1.5 w-3/4 border-[.5px]  outline-none 
+            ${password?.length > 0 && password === confirm ? "border-green-500" : confirm.length === 0 ? "border-slate-500/40" : "border-red-600"}`
+          }
           required 
         />
       </div>
