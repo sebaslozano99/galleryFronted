@@ -72,6 +72,7 @@ async function login(e, email, password){
         if(data?.error) throw new Error(data?.error);
 
         console.log(data);
+        return data;
     }
     catch(error){
         throw new Error(error.message || error.error); 

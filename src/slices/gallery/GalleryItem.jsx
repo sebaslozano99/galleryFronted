@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUserContext } from "../../context/UserContext";
 import { deletePicture } from "../../services/gallery";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
@@ -10,13 +11,14 @@ import toast from "react-hot-toast";
 
 
 
-
 export default function GalleryItem({item}) {
 
   const queryClient = useQueryClient();
+  const { userInfo } = useUserContext();
+  const { user_id } = userInfo;
 
   const { mutate, isPending: isDeleting } = useMutation({
-    mutationFn: () => deletePicture(item.id),
+    mutationFn: () => deletePicture( user_id, item.id),
     onSuccess: () => {
       queryClient.invalidateQueries(["getGallery"]);
       toast.success("Memory deleted!", {duration: 1500, position: "top-right", icon: "❌"});

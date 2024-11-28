@@ -1,12 +1,13 @@
 const API_URL = "http://localhost:5000/api";
 
 
-async function fetchGallery(){
+async function fetchGallery(user_id){
     try{
-      const res = await fetch(`${API_URL}/gallery`);
+      const res = await fetch(`${API_URL}/gallery/${user_id}`);
       
       if(!res.ok) {
-        const errorData = res.json();
+        const errorData = await res.json();
+        console.log("error data: ", errorData);
         throw new Error(errorData?.message || "Failed to fetch gallery!");
       } 
 
@@ -22,12 +23,12 @@ async function fetchGallery(){
 
 
 
-async function fetchSingleImage(pictureID){
+async function fetchSingleImage(user_id, pictureID){
   try{
-    const res = await fetch(`${API_URL}/gallery/${pictureID}`);
+    const res = await fetch(`${API_URL}/gallery/${user_id}/${pictureID}`);
     
     if(!res.ok) {
-      const errorData = res.json();
+      const errorData = await res.json();
       throw new Error(errorData?.message || "Failed to fetch memory!");
     } 
 
@@ -53,13 +54,15 @@ async function postOneImage(e, user_id, imageFile, title, description){
     imageFormData.append("description", description);
 
     try{
-      const res = await fetch(`${API_URL}/gallery`, {
+      const res = await fetch(`${API_URL}/gallery/${user_id}`, {
         method: "POST",
         body: imageFormData
       });
 
+      console.log("res Post image: ", res);
+
       if(!res.ok) {
-        const errorData = res.json();
+        const errorData = await res.json();
         throw new Error(errorData?.message || "Failed to add memory!");
       } 
 
@@ -74,7 +77,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
 
 
   
-  async function updateOneImage(e, picture_id, imageFile, title, description){
+  async function updateOneImage(e, user_id, picture_id, imageFile, title, description){
 
     e.preventDefault();
 
@@ -84,13 +87,13 @@ async function postOneImage(e, user_id, imageFile, title, description){
     imageFormData.append("description", description);
 
     try{
-      const res = await fetch(`${API_URL}/gallery/${picture_id}`, {
+      const res = await fetch(`${API_URL}/gallery/${user_id}/${picture_id}`, {
         method: "PUT",
         body: imageFormData
       });
 
       if(!res.ok) {
-        const errorData = res.json();
+        const errorData = await res.json();
         throw new Error(errorData?.message || "Failed to Update memory!");
       } 
         
@@ -106,14 +109,14 @@ async function postOneImage(e, user_id, imageFile, title, description){
 
 
 
-  async function deletePicture(id){
+  async function deletePicture(user_id, photoID){
     try{
-      const res = await fetch(`${API_URL}/gallery/${id}`, {
+      const res = await fetch(`${API_URL}/gallery/${user_id}/${photoID}`, {
         method: "DELETE",
       });
 
       if(!res.ok) {
-        const errorData = res.json();
+        const errorData = await res.json();
         throw new Error(errorData?.message || "Failed to Delete memory!");
       } 
       

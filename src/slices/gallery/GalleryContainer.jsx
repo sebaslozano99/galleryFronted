@@ -3,12 +3,15 @@ import { FaPlus } from "react-icons/fa";
 import SquareLoader from "../../components/SquareLoader";
 import GalleryItem from "./GalleryItem";
 import useGetGallery from "./useGetGallery";
+import { useUserContext } from "../../context/UserContext";
 
 
 
 export default function GalleryContainer() {
 
-  const { gallery, isPending, isError, error } = useGetGallery();
+  const { userInfo } = useUserContext();
+  const { user_id } = userInfo;
+  const { gallery, isPending, isError, error } = useGetGallery(user_id);
     
     
   if(isError) return <div className="flex justify-center items-center w-full min-h-[92vh]" >
