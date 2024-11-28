@@ -4,7 +4,9 @@ import { updateOneImage } from "../../services/gallery";
 import useGetSingleImage from "./useGetSingleImage";
 import LoadingPage from "../../components/LoadingPage";
 import SquareLoader from "../../components/SquareLoader";
-import useMutate from "./useMutate";
+import { useUserContext } from "../../context/UserContext";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 
 const initialState = {
@@ -39,16 +41,24 @@ function reducer(state, action){
 
 export default function GalleryEditMemory() {
 
+  const { userInfo } = useUserContext();
+  const { user_id } = userInfo;
   const { pictureID } = useParams();
   const [{title, description, file}, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
-  function navigateGallery(){
-    navigate("/gallery");
-  }
-  
-  const { singleImage, isPending, isSuccess } = useGetSingleImage(pictureID);
-  const { mutate: handleUpdate, isPending: isUpdating } = useMutate(pictureID, file, title, description, updateOneImage, navigateGallery, "updated successfully!");
 
+  
+  const { singleImage, isPending, isSuccess } = useGetSingleImage(user_id, pictureID);
+  // const { mutate: handleUpdate, isPending: isUpdating } = useMutate(user_id, pictureID, file, title, description, updateOneImage, navigateGallery, "updated successfully!");
+
+  const {mutate: handleUpdate, isPending: isUpdating } = useMutation({
+    mutationFn: (e) => updateOneImage(e, user_id, pictureID, file, title, description),
+    onSuccess: () => {
+      toast.success("Memory updated!", { icon: "❤️" });
+      navigate("/gallery");
+    },
+    onError: (error) => toast.error(error.message)
+  })
 
 
 

@@ -7,12 +7,10 @@ async function fetchGallery(user_id){
       
       if(!res.ok) {
         const errorData = await res.json();
-        console.log("error data: ", errorData);
         throw new Error(errorData?.message || "Failed to fetch gallery!");
       } 
 
       const data = await res.json();
-      // console.log("data: ", data);
       return data;
     }
     catch(error){
@@ -33,7 +31,6 @@ async function fetchSingleImage(user_id, pictureID){
     } 
 
     const data = await res.json();
-    // console.log("data: ", data);
     return data;
   }
   catch(error){
@@ -59,15 +56,12 @@ async function postOneImage(e, user_id, imageFile, title, description){
         body: imageFormData
       });
 
-      console.log("res Post image: ", res);
-
       if(!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData?.message || "Failed to add memory!");
       } 
 
       const data = await res.json();
-      // console.log(data);
       return data;
     }
     catch(error){
@@ -99,7 +93,6 @@ async function postOneImage(e, user_id, imageFile, title, description){
         
 
       const data = await res.json();
-      // console.log(data
       return data;
     }
     catch(error){
@@ -121,7 +114,6 @@ async function postOneImage(e, user_id, imageFile, title, description){
       } 
       
       const result = await res.json();
-      // console.log(result);
       return result;
     }
     catch(error){

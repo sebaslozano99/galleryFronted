@@ -1,7 +1,10 @@
 import { useReducer } from "react";
 import { postOneImage } from "../../services/gallery";
 import { useNavigate } from "react-router-dom";
-import useMutate from "./useMutate";
+import { useMutation } from "@tanstack/react-query";
+import { useUserContext } from "../../context/UserContext";
+import toast from "react-hot-toast";
+
 
 
 const initialState = {
@@ -35,13 +38,21 @@ function reducer(state, action){
 
 export default function GalleryNewMemory() {
 
+  const { userInfo } = useUserContext();
+  const { user_id } = userInfo;
   const [{title, description, file}, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
-  function navigateGallery(){
-    navigate("/gallery");
-  }
+  
 
-  const { mutate: postImage, isPending: isPosting } = useMutate(1, file, title, description, postOneImage, navigateGallery, "Memory added!");
+  const { mutate: postImage, isPending: isPosting } = useMutation({
+    mutationFn: (e) => postOneImage(e, user_id, file, title, description),
+    onSuccess:() => {
+        toast.success("Memory saved!", {icon: "❤️"});
+        navigate("/gallery");
+    },
+    onError: (error) => toast.error(error.message)
+  });
+
 
 
   return (
