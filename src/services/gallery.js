@@ -51,7 +51,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
     imageFormData.append("description", description);
 
     try{
-      const res = await fetch(`${API_URL}/gallery/${user_id}`, {
+      const res = await fetch(`${API_URL}/gallery`, {
         method: "POST",
         body: imageFormData
       });
@@ -71,7 +71,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
 
 
   
-  async function updateOneImage(e, user_id, picture_id, imageFile, title, description){
+  async function updateOneImage(e, picture_id, imageFile, title, description){
 
     e.preventDefault();
 
@@ -81,7 +81,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
     imageFormData.append("description", description);
 
     try{
-      const res = await fetch(`${API_URL}/gallery/${user_id}/${picture_id}`, {
+      const res = await fetch(`${API_URL}/gallery/${picture_id}`, {
         method: "PUT",
         body: imageFormData
       });
@@ -102,9 +102,9 @@ async function postOneImage(e, user_id, imageFile, title, description){
 
 
 
-  async function deletePicture(user_id, photoID){
+  async function deletePicture(photoID){
     try{
-      const res = await fetch(`${API_URL}/gallery/${user_id}/${photoID}`, {
+      const res = await fetch(`${API_URL}/gallery/${photoID}`, {
         method: "DELETE",
       });
 
