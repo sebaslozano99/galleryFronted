@@ -15,11 +15,6 @@ function UserProvider({children}) {
 
 
   useEffect(() => {
-    console.log(isAuthenticated);
-  }, [isAuthenticated])
-
-
-  useEffect(() => {
 
     async function getUsersDataFromCookies(){
       setIsLoading(true);

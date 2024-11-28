@@ -83,6 +83,26 @@ async function login(e, email, password){
 }
 
 
+async function logout(){
+    try{
+        const res = await fetch(`${API_URL}/logout`, {
+            method: "POST",
+            credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if(data?.error) throw new Error(data?.error);
+
+        console.log("logout: ", data);
+        return data;
+    }
+    catch(error){
+        throw new Error(error.message || error.error); 
+    } 
+}
+
+
 
 async function verifyTokenForUse(){
     try{
@@ -106,4 +126,4 @@ async function verifyTokenForUse(){
 
 
 
-export { signup, login, verifyTokenForUse }
+export { signup, login, logout, verifyTokenForUse }
