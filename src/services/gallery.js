@@ -3,7 +3,10 @@ const API_URL = "http://localhost:5000/api";
 
 async function fetchGallery(user_id){
     try{
-      const res = await fetch(`${API_URL}/gallery/${user_id}`);
+      const res = await fetch(`${API_URL}/gallery/${user_id}`, {
+        method: "GET",
+        credentials: "include"
+      });
       
       if(!res.ok) {
         const errorData = await res.json();
@@ -23,7 +26,10 @@ async function fetchGallery(user_id){
 
 async function fetchSingleImage(user_id, pictureID){
   try{
-    const res = await fetch(`${API_URL}/gallery/${user_id}/${pictureID}`);
+    const res = await fetch(`${API_URL}/gallery/${user_id}/${pictureID}`, {
+      method: "GET",
+      credentials: "include"
+    });
     
     if(!res.ok) {
       const errorData = await res.json();
@@ -53,6 +59,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
     try{
       const res = await fetch(`${API_URL}/gallery`, {
         method: "POST",
+        credentials: "include",
         body: imageFormData
       });
 
@@ -83,6 +90,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
     try{
       const res = await fetch(`${API_URL}/gallery/${picture_id}`, {
         method: "PUT",
+        credentials: "include",
         body: imageFormData
       });
 
@@ -106,6 +114,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
     try{
       const res = await fetch(`${API_URL}/gallery/${photoID}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if(!res.ok) {

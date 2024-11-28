@@ -1,5 +1,6 @@
-import { useReducer } from "react";
+import { useUserContext } from "../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
+import { useReducer } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { signup } from "../../services/users";
 import Button from "../../components/Button";
@@ -56,11 +57,17 @@ function reducer(state, action){
 export default function Signup() {
   
   const [{email, lastName, name, password, confirm}, dispatch] = useReducer(reducer, initialState);
+  const { setUserInfo, setIsAuthenticated } = useUserContext();
+
   const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationFn: (e) =>  signup(e, name, lastName, email, password, confirm),
-    onSuccess: () => navigate("/gallery"),
+    onSuccess: (data) => {
+      setUserInfo(data?.user);
+      setIsAuthenticated(true);
+      navigate("/gallery");
+    },
     onError: (error) => {
       toast.error(error.message);
     }

@@ -29,6 +29,7 @@ async function signup(e, name, lastName, email, password, confirm){
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify(newUser)
         });
 
@@ -64,6 +65,7 @@ async function login(e, email, password){
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify(user)
         });
 
@@ -82,7 +84,26 @@ async function login(e, email, password){
 
 
 
+async function verifyTokenForUse(){
+    try{
+        const res = await fetch(`${API_URL}/verify`, {
+            method: "GET",
+            credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if(data?.error) throw new Error(data?.error);
+
+        // console.log("verifyTokenForUse: ", data);
+        return data;
+    }
+    catch(error){
+        throw new Error(error.message || error.error); 
+    }
+}
 
 
 
-export { signup, login }
+
+export { signup, login, verifyTokenForUse }

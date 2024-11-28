@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../services/users";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import toast from "react-hot-toast";
 import { useUserContext } from "../../context/UserContext";
@@ -12,13 +12,15 @@ export default function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserInfo } = useUserContext();
-  // const navigate = useNavigate();
+  const { setUserInfo, setIsAuthenticated } = useUserContext();
+  const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationFn: (e) => login(e, email, password),
     onSuccess: (data) => {
       setUserInfo(data?.user);
+      setIsAuthenticated(true);
+      navigate("/gallery");
     },
     onError: (error) => toast.error(error.error || error.message),
   });
