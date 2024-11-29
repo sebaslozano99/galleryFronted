@@ -69,6 +69,7 @@ async function postOneImage(e, user_id, imageFile, title, description){
       } 
 
       const data = await res.json();
+      console.log(data);
       return data;
     }
     catch(error){

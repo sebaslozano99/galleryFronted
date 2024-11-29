@@ -97,6 +97,7 @@ export default function GalleryNewMemory() {
                     id="picture"
                     type="file" 
                     name="picture"
+                    accept="image/jpg, image/jpeg, image/png"
                     onChange={(e) => dispatch({type: "file/seteFile", payload: e.target.files[0]})}
                     required
                 />
